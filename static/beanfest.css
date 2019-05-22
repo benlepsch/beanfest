@@ -1,0 +1,48 @@
+
+.background {
+    position: absolute;
+
+}
+
+.menu {
+	position: absolute;
+	background-color: white;
+	outline: 2px solid black;
+	display: none;
+}
+
+.username {
+	position: absolute;
+	width: 60%;
+	height: 10%;
+	text-align: center;
+	font-size: 150%;
+}
+
+.playbutton {
+	position: absolute;
+}
+
+.error {
+	text-align: center;
+	color: red;
+	font-size: 100%;
+}
+
+.block {
+    display: block;
+    width: 30%;
+    height: 15%;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 28px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.block:hover {
+	background-color: gainsboro;
+	color: black;
+}

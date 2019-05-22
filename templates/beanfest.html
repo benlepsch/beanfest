@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="{{ url_for('static', filename='jquery.js') }}"></script>
+        <script src="https://cdn.socket.io/socket.io-1.0.0.js"></script>
+        <script src="{{ url_for('static', filename='beanfest.js') }}"></script>
+        <link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='beanfest.css') }}"/>
+    </head>
+    <body>
+        <div id='players' style='cursor: crosshair'>
+
+        </div>
+        <div id='bullets' style='cursor: crosshair'>
+
+        </div>
+        <div id='menu' class='menu'>
+            <img id='beanfest_logo' src="{{ url_for('static', filename='beanfest_logo.png') }}">
+            <h2 id='error' style='text-align: center'>Enter Username:</h3>
+            <input id='username' class='username' placeholder='username'></input><br>
+            <button onClick='play()' id='playbutton' class='block' style='position:absolute;'>Play!</button>
+        </div>
+        <div id='loading' style='display:none;'>
+            <h1 id='loading_header'>Loading...</h1>
+        </div>
+    </body>
+</html>
