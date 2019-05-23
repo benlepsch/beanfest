@@ -136,7 +136,10 @@ function runGame() {
         if (loaded) {
             if (first) {
                 document.getElementById('loading').style.display = 'none';
-                document.getElementById('background').style.display = 'block';
+                let background = document.getElementById('background');
+                background.style.display = 'block';
+                background.style.width = getPercent(10000, true);
+                background.style.height = getPercent(10000, false);
                 first = false;
                 //set up game
             }
