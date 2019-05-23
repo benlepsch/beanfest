@@ -1,4 +1,4 @@
-from flask import url_for, render_template
+from flask import url_for, render_template, request
 from flask_socketio import SocketIO, emit
 from app import app, socketio
 from werkzeug.contrib.cache import SimpleCache
