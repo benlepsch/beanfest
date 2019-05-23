@@ -19,6 +19,7 @@
 */
 
 var screen_height, screen_width;
+var scaleX, scaleY;
 var socket;
 var initZoom;
 const player = { player_id: '' }; //store each player in an object of { player_id: player_id, username: username, pos: {x: 0, y: 0}, health: 100, kills: 0}
@@ -89,7 +90,10 @@ function play() {
     player.username = document.getElementById('username').value;
 
     if (player.player_id == '') {
-        socket.emit('need id', {});
+        scaleX = getPercent(10000, true);
+        scaleY = getPercent(10000, false);
+        
+        socket.emit('need id', { username: player.username });
         waitForId();
     }
 
