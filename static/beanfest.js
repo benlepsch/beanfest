@@ -21,7 +21,7 @@
 var screen_height, screen_width;
 var socket;
 var initZoom;
-const player = {}; //store each player in an object of { player_id: player_id, username: username, pos: {x: 0, y: 0}, health: 100, kills: 0}
+const player = { player_id: '' }; //store each player in an object of { player_id: player_id, username: username, pos: {x: 0, y: 0}, health: 100, kills: 0}
 
 var loaded = false;
 var first = true;
@@ -33,12 +33,24 @@ function getPercent(px, width) {
     return (100 * px / screen_height) + 'px';
 }
 
+function waitForId() {
+    if (player.player_id == '') {
+        requestAnimationFrame(waitForId);
+    } else {
+        return;
+    }
+}
+
 $(document).ready(function() {
     screen_height = $(window).height();
     screen_width = $(window).width();
     initZoom = window.devicePixelRatio;
 
     socket = io.connect('http://' + document.domain + ':' + location.port + '/beanfest');
+
+    socket.on('give id', (msg) => {
+        player.player_id = msg.player_id;
+    })
     showMenu();
 });
 
@@ -68,19 +80,22 @@ function play() {
     }
 
     player.username = document.getElementById('username').value;
-    socket.emit('need id', {});
+    
+    if (player.player_id == '') {
+        socket.emit('need id', {});
+        waitForId();
+    }
 
+    document.getElementById('menu').style.display = 'none';
+    document.getElementById('loading').style.display = 'block';
     // request player id from server
     // hide menu, load in background
     // receive data from server and load in other players
     // startGame()
 }
 
-function makeBackground() {
-    let background = document.createElement('img');
-    background.src = "{{ url_for('static', filename='bean_map.png') }}";
-    background.style.width = getPercent(10000, true);
-    background.style.height = getPercent(10000, false);
+function loaded() {
+    loaded = true;
 }
 
 //runs the game at a specified fps
@@ -100,6 +115,13 @@ function runGame() {
 
     if (elapsed > fpsInterval) {
         then = now - (elapsed % fpsInterval);
-        
+        if (loaded) {
+            if (first) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('background').style.display = 'block';
+                //set up game
+            }
+            //update
+        }
     }
 }

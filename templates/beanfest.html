@@ -19,6 +19,7 @@
             <input id='username' class='username' placeholder='username'></input><br>
             <button onClick='play()' id='playbutton' class='block' style='position:absolute;'>Play!</button>
         </div>
+        <img id='background' class='background' onload="loaded()" src="{{ url_for('static', filename='bean_map.png') }}">
         <div id='loading' style='display:none;'>
             <h1 id='loading_header'>Loading...</h1>
         </div>
