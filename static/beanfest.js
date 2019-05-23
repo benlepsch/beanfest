@@ -26,6 +26,8 @@ const player = { player_id: '' }; //store each player in an object of { player_i
 var loaded = false;
 var first = true;
 
+var onLoop = 0;
+
 function getPercent(px, width) {
     if (width) {
         return (100 * px / screen_width) + 'px';
@@ -50,7 +52,12 @@ $(document).ready(function() {
 
     socket.on('give id', (msg) => {
         player.player_id = msg.player_id;
-    })
+    });
+
+    socket.on('init data', (msg) => {
+        console.log(msg);
+    });
+
     showMenu();
 });
 
@@ -88,6 +95,10 @@ function play() {
 
     document.getElementById('menu').style.display = 'none';
     document.getElementById('loading').style.display = 'block';
+
+    //run the game loop 150 times a second but only request server data 30 times
+    //this is to move the bullets super fast
+    startGame(150);
     // request player id from server
     // hide menu, load in background
     // receive data from server and load in other players
@@ -115,10 +126,18 @@ function runGame() {
 
     if (elapsed > fpsInterval) {
         then = now - (elapsed % fpsInterval);
+        
+        onLoop += 1;
+        if (onLoop == 4) {
+            //request/send server data here
+            onLoop = 0;
+        }
+        //move bullets here
         if (loaded) {
             if (first) {
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('background').style.display = 'block';
+                first = false;
                 //set up game
             }
             //update
