@@ -18,5 +18,5 @@ def beanfest():
 
 @socketio.on('need id', namespace='/beanfest')
 def need_id(message):
-    emit('give id', {player_id: request.sid})
+    emit('give id', {'player_id': request.sid})
     emit('init data', get_cache())
