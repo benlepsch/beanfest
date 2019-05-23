@@ -80,7 +80,7 @@ function play() {
     }
 
     player.username = document.getElementById('username').value;
-    
+
     if (player.player_id == '') {
         socket.emit('need id', {});
         waitForId();
@@ -94,7 +94,7 @@ function play() {
     // startGame()
 }
 
-function loaded() {
+function load_background() {
     loaded = true;
 }
 

@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>Beanfest FFA</title>
+        <link rel="icon" href="{{ url_for('static', filename='bean_icon.png') }}">
         <script src="{{ url_for('static', filename='jquery.js') }}"></script>
         <script src="https://cdn.socket.io/socket.io-1.0.0.js"></script>
         <script src="{{ url_for('static', filename='beanfest.js') }}"></script>
         <link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='beanfest.css') }}"/>
     </head>
-    <body>
+    <body style="overflow:hidden">
         <div id='players' style='cursor: crosshair'>
 
         </div>
@@ -19,7 +21,7 @@
             <input id='username' class='username' placeholder='username'></input><br>
             <button onClick='play()' id='playbutton' class='block' style='position:absolute;'>Play!</button>
         </div>
-        <img id='background' class='background' onload="loaded()" src="{{ url_for('static', filename='bean_map.png') }}">
+        <img id='background' class='background' onload="load_background()" src="{{ url_for('static', filename='bean_map.png') }}">
         <div id='loading' style='display:none;'>
             <h1 id='loading_header'>Loading...</h1>
         </div>
