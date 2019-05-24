@@ -1,5 +1,4 @@
+# IMPORTANT
+The URL in the github description is the game that's in development right now, and doesn't actually let you play yet. To play an unfinished version, go to [this website](http://ben.jacktimmins.com/multiplayer_map) instead.
+
 Git repo for the Beanfest FFA online game i'm developing
-
-Original concept by owen guiffre
-
-beanfest can be found [here](http://ben.jacktimmins.com/beanfest)
