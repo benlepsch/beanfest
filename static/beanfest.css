@@ -1,3 +1,13 @@
+.player_icon {
+	position: absolute;
+	outline: 2px solid black;
+}
+
+.name {
+	position: absolute;
+	color: white;
+	-webkit-text-stroke: 1px black;
+}
 
 .background {
 	position: absolute;

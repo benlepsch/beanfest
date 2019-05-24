@@ -53,10 +53,15 @@ $(document).ready(function() {
 
     socket.on('give id', (msg) => {
         player.player_id = msg.player_id;
+        player.position = msg.position;
+        player.kills = 0;
+        player.health = 100;
     });
 
     socket.on('init data', (msg) => {
-        console.log(msg);
+        for (let i = 0; i < msg.length; i++) {
+            updatePlayer(msg[i]);
+        }
     });
 
     showMenu();
@@ -81,9 +86,10 @@ function showMenu() {
 	playbtn.style.top = '80%';
 }
 
+
+
 function play() {
     if (document.getElementById('username').value == '') {
-        document.getElementById('error').style.color = 'red';
         return;
     }
 
@@ -92,7 +98,7 @@ function play() {
     if (player.player_id == '') {
         scaleX = getPercent(10000, true);
         scaleY = getPercent(10000, false);
-        
+
         socket.emit('need id', { username: player.username });
         waitForId();
     }
@@ -111,6 +117,30 @@ function play() {
 
 function load_background() {
     loaded = true;
+}
+
+function updatePlayer(data) {
+    let player = document.getElementById(data.player_id.toString());
+    if (player == undefined || player == null) {
+        createPlayer(data);
+        player = document.getElementById(data.player_id.toString());
+    }
+
+    let player_icon = player.getElementsByClassName('player_icon')[0];
+
+    let username = player.getElementsByClassName('username')[0];
+}
+
+function createPlayer(data) {
+    let player = document.createElement('div');
+    player.setAttribute('id', data.player_id.toString());
+
+    let player_icon = document.createElement('div');
+    player_icon.classList.add('player_icon');
+
+    let username = document.createElement('div');
+    username.classList.add('username');
+    username.innerHTML = data.username; 
 }
 
 //runs the game at a specified fps
