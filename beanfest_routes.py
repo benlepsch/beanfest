@@ -6,11 +6,22 @@ from werkzeug.contrib.cache import SimpleCache
 players = []
 cache = SimpleCache(default_timeout=0)
 
-def get_cache():
-    full_cache = []
-    for player in players:
-        full_cache.append(cache.get(str(player)))
-    return full_cache
+class Position:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+    
+    def set(self, x, y):
+        self.x = x
+        self.y = y
+
+class Player:
+    def __init__(self, player_id, username):
+        self.player_id = player_id
+        self.username = username
+        self.position = Position(0,0)
+        self.kills = 0
+        self.health = 100
 
 @app.route('/beanfest')
 def beanfest():
@@ -18,7 +29,5 @@ def beanfest():
 
 @socketio.on('need id', namespace='/beanfest')
 def need_id(message):
-    players.append(request.sid)
-    cache.set(str(request.sid), { 'player_id': request.sid, 'username': message['username'], 'position': {'x': 0, 'y': 0}, 'kills': 0, 'health': 100 })
-    emit('give id', cache.get(str(request.sid)))
-    emit('init data', get_cache())
+    players.append(Player(request.sid, message['username']))
+    emit('give id', players[len(players)-1])
