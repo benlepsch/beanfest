@@ -52,6 +52,7 @@ $(document).ready(function() {
     socket = io.connect('http://' + document.domain + ':' + location.port + '/beanfest');
 
     socket.on('give id', (msg) => {
+        console.log('working');
         player.player_id = msg.player_id;
         player.position = msg.position;
         player.kills = 0;

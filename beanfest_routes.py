@@ -14,6 +14,9 @@ class Position:
     def set(self, x, y):
         self.x = x
         self.y = y
+    
+    def data(self):
+        return {'x': self.x, 'y': self.y}
 
 class Player:
     def __init__(self, player_id, username):
@@ -22,6 +25,9 @@ class Player:
         self.position = Position(0,0)
         self.kills = 0
         self.health = 100
+    
+    def data(self):
+        return {'player_id': self.player_id, 'username': self.username, 'position': self.position.data, 'kills': self.kills, 'health': self.health}
 
 @app.route('/beanfest')
 def beanfest():
@@ -30,4 +36,4 @@ def beanfest():
 @socketio.on('need id', namespace='/beanfest')
 def need_id(message):
     players.append(Player(request.sid, message['username']))
-    emit('give id', players[len(players)-1])
+    emit('give id', players[len(players)-1].data)
