@@ -19,15 +19,28 @@
 */
 
 var screen_height, screen_width;
-var scaleX, scaleY;
 var socket;
 var initZoom;
 const player = { player_id: '' }; //store each player in an object of { player_id: player_id, username: username, pos: {x: 0, y: 0}, health: 100, kills: 0}
 
+const initSpeed = 5;
+var speed = initSpeed;
+const keys = {};
+
 var loaded = false;
 var first = true;
 
+var game_running = false;
+
 var onLoop = 0;
+
+window.onkeydown = function() {
+
+}
+
+window.onkeyup = function() {
+
+}
 
 function getPercent(px, width) {
     if (width) {
@@ -110,6 +123,7 @@ function play() {
 
     //run the game loop 150 times a second but only request server data 30 times
     //this is to move the bullets super fast
+    game_running = true;
     startGame(150);
     // request player id from server
     // hide menu, load in background
@@ -134,15 +148,27 @@ function updatePlayer(data) {
 }
 
 function createPlayer(data) {
-    let player = document.createElement('div');
-    player.setAttribute('id', data.player_id.toString());
+    let new_player = document.createElement('div');
+    new_player.setAttribute('id', data.player_id.toString());
 
     let player_icon = document.createElement('div');
     player_icon.classList.add('player_icon');
+    player_icon.style.width = getPercent(40, true) + '%';
+    player_icon.style.height = getPercent(40, false) + '%';
 
     let username = document.createElement('div');
     username.classList.add('username');
+    username.style.height = getPercent(35, false) + '%';
     username.innerHTML = data.username; 
+
+    document.getElementById('players').appendChild(new_player);
+    new_player.appendChild(player_icon);
+    new_player.appendChild(username);
+
+    if (data.player_id == player.player_id) { //it's the client's player
+        player_icon.style.left = getPercent((screen_width/2 - player_icon.clientWidth/2), true);
+        player_icon.style.top = getPercent((screen_height/2 - player_icon.clientHeight/2), false);
+    }
 }
 
 //runs the game at a specified fps
@@ -177,9 +203,7 @@ function runGame() {
                 background.style.width = getPercent(10000, true);
                 background.style.height = getPercent(10000, false);
                 first = false;
-                //set up game
             }
-            //update
         }
     }
 }
