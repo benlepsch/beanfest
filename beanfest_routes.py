@@ -37,3 +37,9 @@ def beanfest():
 def need_id(message):
     players.append(Player(request.sid, message['username']))
     emit('give id', players[len(players)-1].data())
+
+@socketio.on('disconnect', namespace='/beanfest')
+def disconnect():
+    try:
+        players.remove(request.sid)
+        emit('remove player', { 'player_id': request.sid }, broadcast=True)

@@ -31,9 +31,9 @@ var onLoop = 0;
 
 function getPercent(px, width) {
     if (width) {
-        return (100 * px / screen_width) + 'px';
+        return (100 * px / screen_width) + '%';
     }
-    return (100 * px / screen_height) + 'px';
+    return (100 * px / screen_height) + '%';
 }
 
 function waitForId() {
@@ -64,6 +64,10 @@ $(document).ready(function() {
             updatePlayer(msg[i]);
         }
     });
+
+    socket.on('remove player', (msg) => {
+        document.getElementById('players').removeChild(document.getElementById(msg.player_id));
+    })
 
     showMenu();
 });
@@ -97,9 +101,6 @@ function play() {
     player.username = document.getElementById('username').value;
 
     if (player.player_id == '') {
-        scaleX = getPercent(10000, true);
-        scaleY = getPercent(10000, false);
-
         socket.emit('need id', { username: player.username });
         waitForId();
     }
