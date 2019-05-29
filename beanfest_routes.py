@@ -43,3 +43,5 @@ def disconnect():
     try:
         players.remove(request.sid)
         emit('remove player', { 'player_id': request.sid }, broadcast=True)
+    except:
+        pass
