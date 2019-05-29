@@ -80,7 +80,7 @@ $(document).ready(function() {
 
     socket.on('remove player', (msg) => {
         document.getElementById('players').removeChild(document.getElementById(msg.player_id));
-    })
+    });
 
     showMenu();
 });
@@ -136,15 +136,15 @@ function load_background() {
 }
 
 function updatePlayer(data) {
-    let player = document.getElementById(data.player_id.toString());
-    if (player == undefined || player == null) {
+    let updating = document.getElementById(data.player_id.toString());
+    if (updating == undefined || updating == null) {
         createPlayer(data);
-        player = document.getElementById(data.player_id.toString());
+        updating = document.getElementById(data.player_id.toString());
     }
 
-    let player_icon = player.getElementsByClassName('player_icon')[0];
+    let player_icon = updating.getElementsByClassName('player_icon')[0];
 
-    let username = player.getElementsByClassName('username')[0];
+    let username = updating.getElementsByClassName('username')[0];
 }
 
 function createPlayer(data) {
@@ -153,12 +153,12 @@ function createPlayer(data) {
 
     let player_icon = document.createElement('div');
     player_icon.classList.add('player_icon');
-    player_icon.style.width = getPercent(40, true) + '%';
-    player_icon.style.height = getPercent(40, false) + '%';
+    player_icon.style.width = getPercent(40, true);
+    player_icon.style.height = getPercent(40, false);
 
     let username = document.createElement('div');
     username.classList.add('username');
-    username.style.height = getPercent(35, false) + '%';
+    username.style.height = getPercent(35, false);
     username.innerHTML = data.username; 
 
     document.getElementById('players').appendChild(new_player);

@@ -6,6 +6,13 @@ from werkzeug.contrib.cache import SimpleCache
 players = []
 cache = SimpleCache(default_timeout=0)
 
+def get_cache():
+    global players
+    to_return = []
+    for player in players:
+        to_return.append(player.data())
+    return to_return
+
 class Position:
     def __init__(self, x, y):
         self.x = x
@@ -37,6 +44,7 @@ def beanfest():
 def need_id(message):
     players.append(Player(request.sid, message['username']))
     emit('give id', players[len(players)-1].data())
+    emit('init data', get_cache())
 
 @socketio.on('disconnect', namespace='/beanfest')
 def disconnect():
