@@ -2,6 +2,7 @@ from flask import url_for, render_template, request
 from flask_socketio import SocketIO, emit
 from app import app, socketio
 from werkzeug.contrib.cache import SimpleCache
+import random
 
 players = []
 cache = SimpleCache(default_timeout=0)
@@ -29,7 +30,9 @@ class Player:
     def __init__(self, player_id, username):
         self.player_id = player_id
         self.username = username
-        self.position = Position(0,0)
+        init_x = random.randint(0, 201)/10 + 40
+        init_y = random.randint(0, 201)/10 + 40
+        self.position = Position(init_x, init_y)
         self.kills = 0
         self.health = 100
     

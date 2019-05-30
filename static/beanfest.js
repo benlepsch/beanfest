@@ -21,6 +21,7 @@
 var screen_height, screen_width;
 var socket;
 var initZoom;
+var initData;
 const player = { player_id: '' }; //store each player in an object of { player_id: player_id, username: username, pos: {x: 0, y: 0}, health: 100, kills: 0}
 
 const initSpeed = 5;
@@ -82,9 +83,7 @@ $(document).ready(function() {
     });
 
     socket.on('init data', (msg) => {
-        for (let i = 0; i < msg.length; i++) {
-            updatePlayer(msg[i]);
-        }
+        initData = msg;
     });
 
     socket.on('remove player', (msg) => {
@@ -157,12 +156,19 @@ function updatePlayer(data) {
         player_icon.style.left = getPercent((screen_width/2 - player_icon.clientWidth/2), true);
         player_icon.style.top = getPercent((screen_height/2 - player_icon.clientHeight/2), false);
     } else {
-        
-
+        let background = document.getElementById('background');
+        /*
+            position is {x, y}
+            as percentages of the background image
+            multiply percentage by background image width/height to get where it is
+            then add the background left/top position already to get where it is relative to your screen
+        */
+        player_icon.style.left = data.position.x/100 * parseFloat(getPercent(parseFloat(background.clientWidth), true)) + parseFloat(background.style.left) + '%';
+        player_icon.style.top = data.position.y/100 * parseFloat(getPercent(parseFloat(background.clientHeight), false)) + parseFloat(background.style.top) + '%';
     }
     
-    username.style.left = player_icon.style.left;
-    username.style.top = parseFloat(player_icon.style.top) + parseFloat(getPercent(player_icon.clientHeight, false)) + parseFloat(getPercent(4, false))+ '%';
+    username.style.left = parseFloat(player_icon.style.left) + parseFloat(getPercent(parseFloat(player_icon.clientWidth)/2, true)) + '%';
+    username.style.top = parseFloat(player_icon.style.top) + parseFloat(getPercent(player_icon.clientHeight, false)) + parseFloat(getPercent(4, false)) + '%';
 }
 
 function createPlayer(data) {
@@ -176,8 +182,8 @@ function createPlayer(data) {
 
     let username = document.createElement('div');
     username.classList.add('username');
-    //username.style.height = getPercent(35, false);
-    username.style.width = getPercent(40, true);
+    username.style.height = getPercent(35, false);
+    username.style.width = '0%';
     username.innerHTML = data.username; 
 
     document.getElementById('players').appendChild(new_player);
@@ -209,13 +215,37 @@ function runGame() {
             onLoop = 0;
         }
         //move bullets here
+
+        /* 
+            TODOS:
+            - make the play button originally have text 'loading' and unclickable, background.onload makes it possible to play
+        */
+
         if (loaded) {
             if (first) {
                 document.getElementById('loading').style.display = 'none';
+                
+                //initialize and position background
                 let background = document.getElementById('background');
                 background.style.display = 'block';
                 background.style.width = getPercent(10000, true);
                 background.style.height = getPercent(10000, false);
+                
+                //set background position
+                //-72 x 1300 z (for minecraft not beanfest)
+                let b_x, b_y;
+                b_x = player.position.x/100 * parseFloat(background.style.width) - parseFloat(getPercent(screen_width/2, true));
+                b_y = player.position.y/100 * parseFloat(background.style.height) - parseFloat(getPercent(screen_height/2, false));
+                b_x *= -1;
+                b_y *= -1;
+
+                background.style.left = b_x + '%';
+                background.style.top = b_y + '%';
+
+                //add players
+                for (let i = 0; i < initData.length; i++) {
+                    updatePlayer(initData[i]);
+                }
                 first = false;
             }
         }
