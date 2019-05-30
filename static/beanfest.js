@@ -34,12 +34,14 @@ var game_running = false;
 
 var onLoop = 0;
 
-window.onkeydown = function() {
-
+window.onkeydown = function(e) {
+    let key = e.keyCode ? e.keyCode : e.which;
+    keys[key] = true;
 }
 
 window.onkeyup = function() {
-
+    let key = e.keyCode ? e.keyCode : e.which;
+    keys[key] = false;
 }
 
 function getPercent(px, width) {
@@ -145,6 +147,16 @@ function updatePlayer(data) {
     let player_icon = updating.getElementsByClassName('player_icon')[0];
 
     let username = updating.getElementsByClassName('username')[0];
+
+    if (data.player_id == player.player_id) { //it's the client's player
+        player_icon.style.left = getPercent((screen_width/2 - player_icon.clientWidth/2), true);
+        player_icon.style.top = getPercent((screen_height/2 - player_icon.clientHeight/2), false);
+    } else {
+
+    }
+    
+    username.style.left = player_icon.style.left;
+    username.style.top = parseInt(player_icon.style.top) + parseInt(player_icon.clientHeight) + 'px';
 }
 
 function createPlayer(data) {
@@ -164,11 +176,6 @@ function createPlayer(data) {
     document.getElementById('players').appendChild(new_player);
     new_player.appendChild(player_icon);
     new_player.appendChild(username);
-
-    if (data.player_id == player.player_id) { //it's the client's player
-        player_icon.style.left = getPercent((screen_width/2 - player_icon.clientWidth/2), true);
-        player_icon.style.top = getPercent((screen_height/2 - player_icon.clientHeight/2), false);
-    }
 }
 
 //runs the game at a specified fps
