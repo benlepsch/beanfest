@@ -162,7 +162,7 @@ function updatePlayer(data) {
     }
     
     username.style.left = player_icon.style.left;
-    username.style.top = parseInt(player_icon.style.top) + parseInt(getPercent(player_icon.clientHeight, false)) + '%';
+    username.style.top = parseFloat(player_icon.style.top) + parseFloat(getPercent(player_icon.clientHeight, false)) + parseFloat(getPercent(4, false))+ '%';
 }
 
 function createPlayer(data) {
@@ -176,8 +176,8 @@ function createPlayer(data) {
 
     let username = document.createElement('div');
     username.classList.add('username');
-    username.style.height = getPercent(35, false);
-    username.style.width = player_icon.clientWidth;
+    //username.style.height = getPercent(35, false);
+    username.style.width = getPercent(40, true);
     username.innerHTML = data.username; 
 
     document.getElementById('players').appendChild(new_player);
