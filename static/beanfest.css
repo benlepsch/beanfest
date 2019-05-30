@@ -5,11 +5,13 @@
 	z-index: 99;
 }
 
-.name {
+.username {
 	position: absolute;
+	text-align: center;
 	color: white;
-	-webkit-text-stroke: 1px black;
+	font-size: 150%;
 	z-index: 100;
+	-webkit-text-stroke: 1px black;
 }
 
 .background {
@@ -25,7 +27,7 @@
 	display: none;
 }
 
-.username {
+.username_input {
 	position: absolute;
 	width: 60%;
 	height: 10%;

@@ -36,10 +36,17 @@ var onLoop = 0;
 
 window.onkeydown = function(e) {
     let key = e.keyCode ? e.keyCode : e.which;
-    keys[key] = true;
+    if (!game_running && key == 13) {
+        play();
+    } else {
+        keys[key] = true;
+    }
 }
 
-window.onkeyup = function() {
+window.onkeyup = function(e) {
+    if (!game_running) {
+        return;
+    }
     let key = e.keyCode ? e.keyCode : e.which;
     keys[key] = false;
 }
@@ -106,8 +113,6 @@ function showMenu() {
 	playbtn.style.top = '80%';
 }
 
-
-
 function play() {
     if (document.getElementById('username').value == '') {
         return;
@@ -152,11 +157,12 @@ function updatePlayer(data) {
         player_icon.style.left = getPercent((screen_width/2 - player_icon.clientWidth/2), true);
         player_icon.style.top = getPercent((screen_height/2 - player_icon.clientHeight/2), false);
     } else {
+        
 
     }
     
     username.style.left = player_icon.style.left;
-    username.style.top = parseInt(player_icon.style.top) + parseInt(player_icon.clientHeight) + 'px';
+    username.style.top = parseInt(player_icon.style.top) + parseInt(getPercent(player_icon.clientHeight, false)) + '%';
 }
 
 function createPlayer(data) {
@@ -171,6 +177,7 @@ function createPlayer(data) {
     let username = document.createElement('div');
     username.classList.add('username');
     username.style.height = getPercent(35, false);
+    username.style.width = player_icon.clientWidth;
     username.innerHTML = data.username; 
 
     document.getElementById('players').appendChild(new_player);
