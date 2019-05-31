@@ -53,6 +53,6 @@ def need_id(message):
 def disconnect():
     for player in players:
         if player.player_id == request.sid:
-            players.pop(player)
+            players.pop(players.index(player))
             emit('remove player', {'player_id': request.sid})
     
