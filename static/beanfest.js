@@ -83,11 +83,12 @@ $(document).ready(function() {
     });
 
     socket.on('init data', (msg) => {
+        console.log('set init data');
         initData = msg;
     });
 
     socket.on('remove player', (msg) => {
-        document.getElementById('players').removeChild(document.getElementById(msg.player_id));
+        document.getElementById('players').removeChild(document.getElementById(msg.player_id.toString()));
     });
 
     showMenu();
@@ -121,16 +122,29 @@ function play() {
 
     if (player.player_id == '') {
         socket.emit('need id', { username: player.username });
-        waitForId();
+        console.log('waiting for id');
+        let wait = new Promise(function(resolve, reject) {
+            waitForId();
+        });
+        wait.then(() => {
+            document.getElementById('menu').style.display = 'none';
+            document.getElementById('loading').style.display = 'block';
+
+            //run the game loop 150 times a second but only request server data 30 times
+            //this is to move the bullets super fast
+            game_running = true;
+            startGame(150);
+        });
+    } else {
+
+        document.getElementById('menu').style.display = 'none';
+        document.getElementById('loading').style.display = 'block';
+
+        //run the game loop 150 times a second but only request server data 30 times
+        //this is to move the bullets super fast
+        game_running = true;
+        startGame(150);
     }
-
-    document.getElementById('menu').style.display = 'none';
-    document.getElementById('loading').style.display = 'block';
-
-    //run the game loop 150 times a second but only request server data 30 times
-    //this is to move the bullets super fast
-    game_running = true;
-    startGame(150);
     // request player id from server
     // hide menu, load in background
     // receive data from server and load in other players

@@ -51,8 +51,8 @@ def need_id(message):
 
 @socketio.on('disconnect', namespace='/beanfest')
 def disconnect():
-    try:
-        players.remove(request.sid)
-        emit('remove player', { 'player_id': request.sid }, broadcast=True)
-    except:
-        pass
+    for player in players:
+        if player.player_id == request.sid:
+            players.pop(player)
+            emit('remove player', {'player_id': request.sid})
+    
