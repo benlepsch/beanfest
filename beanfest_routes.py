@@ -4,20 +4,20 @@ from app import app, socketio
 from werkzeug.contrib.cache import SimpleCache
 import random
 
-players = []
-cache = SimpleCache(default_timeout=0)
+sids = []
+players = {}
 
 def get_cache():
-    global players
+    global players, sids
     to_return = []
-    for player in players:
-        to_return.append(player.data())
+    for player in sids:
+        to_return.append(players[player].data())
     return to_return
 
 class Position:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
+    def __init__(self):
+        self.x = random.randint(0, 201)/10 + 40
+        self.y = random.randint(0, 201)/10 + 40
     
     def set(self, x, y):
         self.x = x
@@ -30,9 +30,7 @@ class Player:
     def __init__(self, player_id, username):
         self.player_id = player_id
         self.username = username
-        init_x = random.randint(0, 201)/10 + 40
-        init_y = random.randint(0, 201)/10 + 40
-        self.position = Position(init_x, init_y)
+        self.position = Position()
         self.kills = 0
         self.health = 100
     
@@ -45,14 +43,28 @@ def beanfest():
 
 @socketio.on('need id', namespace='/beanfest')
 def need_id(message):
-    players.append(Player(request.sid, message['username']))
-    emit('give id', players[len(players)-1].data())
+    sids.append(request.sid)
+    players[request.sid] = Player(request.sid, message['username'])
+    emit('give id', players[request.sid].data())
     emit('init data', get_cache())
+
+@socketio.on('recieve data', namespace='/beanfest')
+def recieve_data(message): 
+    global players
+    
+    try:
+        players[request.sid].position = message['position']
+    except:
+        pass
+    
+
 
 @socketio.on('disconnect', namespace='/beanfest')
 def disconnect():
-    for player in players:
-        if player.player_id == request.sid:
-            players.pop(players.index(player))
-            emit('remove player', {'player_id': request.sid})
+    try:
+        players.pop(request.sid)
+        sids.remove(request.sid)
+        emit('remove player', { 'player_id': request.sid }, broadcast=True)
+    except:
+        pass
     
