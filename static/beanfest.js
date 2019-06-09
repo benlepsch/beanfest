@@ -82,6 +82,8 @@ $(document).ready(function() {
         startGame(150);
     });
 
+    socket.on('new data', (msg) => updatePlayer(msg));
+
     socket.on('remove player', (msg) => {
         document.getElementById('players').removeChild(document.getElementById(msg.player_id.toString()));
     });
@@ -188,6 +190,53 @@ function createPlayer(data) {
     new_player.appendChild(username);
 }
 
+function checkKeys() {
+    let x_change = 0;
+    let y_change = 0;
+
+    if (keys[16]) {
+        //shift
+        speed = initSpeed * 2;
+    } else {
+        speed = initSpeed;
+    }
+
+    if (keys[87]) {
+        //w
+        y_change += speed;
+    }
+    if (keys[83]) {
+        //s
+        y_change -= speed;
+    }
+    if (keys[65]) {
+        //a
+        x_change += speed;
+    }
+    if (keys[68]) {
+        //d
+        x_change -= speed;
+    }
+
+    let background = document.getElementById('background');
+    background.style.left = parseFloat(background.style.left) + parseFloat(getPercent(x_change, true)) + '%';
+    background.style.top = parseFloat(background.style.top) + parseFloat(getPercent(y_change, false)) + '%';
+
+    let player_icons = document.getElementById('players').getElementsByClassName('player_icon');
+    let usernames = document.getElementById('players').getElementsByClassName('username');
+
+    for (let i = 0; i < player_icons.length; i++) {
+        if (player_icons[i].parentNode.id != player.player_id) {
+            player_icons[i].style.left = parseFloat(player_icons[i].style.left) + parseFloat(getPercent(x_change, true)) + '%';
+            player_icons[i].style.top = parseFloat(player_icons[i].style.top) + parseFloat(getPercent(y_change, false)) + '%';
+        }
+        if (usernames[i].parentNode.id != player.player_id) {
+            usernames[i].style.left = parseFloat(usernames[i].style.left) + parseFloat(getPercent(x_change, true)) + '%';
+            usernames[i].style.top = parseFloat(usernames[i].style.top) + parseFloat(getPercent(y_change, false)) + '%';
+        }
+    }
+}
+
 //runs the game at a specified fps
 //dont touch i dont know how it works
 let fpsInterval, then, startTime, elapsed;
@@ -229,9 +278,19 @@ function runGame() {
     if (elapsed > fpsInterval) {
         then = now - (elapsed % fpsInterval);
         
+        //move bullets here and nothing else
+
+
+
         onLoop += 1;
         if (onLoop == 4) {
-            //request/send server data here
+            //move player
+            //request/send server data
+
+            checkKeys();
+
+            socket.emit('recieve data', player);
+
             onLoop = 0;
         }
     }

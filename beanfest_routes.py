@@ -53,9 +53,12 @@ def recieve_data(message):
     global players
     
     try:
-        players[request.sid].position = message['position']
+        players[request.sid].position.x = message['position']['x']
+        players[request.sid].position.y = message['position']['y']
     except:
         pass
+
+    emit('new data', players[request.sid].data(), broadcast=True)
     
 
 
