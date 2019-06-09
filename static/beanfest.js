@@ -28,9 +28,6 @@ const initSpeed = 5;
 var speed = initSpeed;
 const keys = {};
 
-var loaded = false;
-var first = true;
-
 var game_running = false;
 
 var onLoop = 0;
@@ -59,14 +56,6 @@ function getPercent(px, width) {
     return (100 * px / screen_height) + '%';
 }
 
-function waitForId() {
-    if (player.player_id == '') {
-        requestAnimationFrame(waitForId);
-    } else {
-        return;
-    }
-}
-
 $(document).ready(function() {
     screen_height = $(window).height();
     screen_width = $(window).width();
@@ -85,6 +74,12 @@ $(document).ready(function() {
     socket.on('init data', (msg) => {
         console.log('set init data');
         initData = msg;
+        document.getElementById('menu').style.display = 'none';
+
+        //run the game loop 150 times a second but only request server data 30 times
+        //this is to move the bullets super fast
+        game_running = true;
+        startGame(150);
     });
 
     socket.on('remove player', (msg) => {
@@ -115,6 +110,7 @@ function showMenu() {
 
 function play() {
     if (document.getElementById('username').value == '') {
+        document.getElementById('error').style.color = 'red';
         return;
     }
 
@@ -123,23 +119,9 @@ function play() {
     if (player.player_id == '') {
         socket.emit('need id', { username: player.username });
         console.log('waiting for id');
-        let wait = new Promise(function(resolve, reject) {
-            waitForId();
-        });
-        wait.then(() => {
-            document.getElementById('menu').style.display = 'none';
-            document.getElementById('loading').style.display = 'block';
-
-            //run the game loop 150 times a second but only request server data 30 times
-            //this is to move the bullets super fast
-            game_running = true;
-            startGame(150);
-        });
     } else {
 
         document.getElementById('menu').style.display = 'none';
-        document.getElementById('loading').style.display = 'block';
-
         //run the game loop 150 times a second but only request server data 30 times
         //this is to move the bullets super fast
         game_running = true;
@@ -152,7 +134,8 @@ function play() {
 }
 
 function load_background() {
-    loaded = true;
+    document.getElementById('playbutton').innerHTML = 'Play!';
+    document.getElementById('playbutton').onclick = play;
 }
 
 function updatePlayer(data) {
@@ -212,6 +195,29 @@ function startGame(fps) {
     fpsInterval = 1000 / fps;
     then = Date.now();
     startTime = then;
+
+    //initialize background position
+    let background = document.getElementById('background');
+    background.style.display = 'block';
+    background.style.width = getPercent(10000, true);
+    background.style.height = getPercent(10000, false);
+    
+    //set background position
+    //-72 x 1300 z (for minecraft not beanfest)
+    let b_x, b_y;
+    b_x = player.position.x/100 * parseFloat(background.style.width) - parseFloat(getPercent(screen_width/2, true));
+    b_y = player.position.y/100 * parseFloat(background.style.height) - parseFloat(getPercent(screen_height/2, false));
+    b_x *= -1;
+    b_y *= -1;
+
+    background.style.left = b_x + '%';
+    background.style.top = b_y + '%';
+
+    //initialize all players
+    for (let i = 0; i < initData.length; i++) {
+        updatePlayer(initData[i]);
+    }
+
     runGame();
 }
 
@@ -227,41 +233,6 @@ function runGame() {
         if (onLoop == 4) {
             //request/send server data here
             onLoop = 0;
-        }
-        //move bullets here
-
-        /* 
-            TODOS:
-            - make the play button originally have text 'loading' and unclickable, background.onload makes it possible to play
-        */
-
-        if (loaded) {
-            if (first) {
-                document.getElementById('loading').style.display = 'none';
-                
-                //initialize and position background
-                let background = document.getElementById('background');
-                background.style.display = 'block';
-                background.style.width = getPercent(10000, true);
-                background.style.height = getPercent(10000, false);
-                
-                //set background position
-                //-72 x 1300 z (for minecraft not beanfest)
-                let b_x, b_y;
-                b_x = player.position.x/100 * parseFloat(background.style.width) - parseFloat(getPercent(screen_width/2, true));
-                b_y = player.position.y/100 * parseFloat(background.style.height) - parseFloat(getPercent(screen_height/2, false));
-                b_x *= -1;
-                b_y *= -1;
-
-                background.style.left = b_x + '%';
-                background.style.top = b_y + '%';
-
-                //add players
-                for (let i = 0; i < initData.length; i++) {
-                    updatePlayer(initData[i]);
-                }
-                first = false;
-            }
         }
     }
 }

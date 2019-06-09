@@ -19,11 +19,8 @@
             <img id='beanfest_logo' src="{{ url_for('static', filename='beanfest_logo.png') }}">
             <h2 id='error' style='text-align: center'>Enter Username:</h3>
             <input id='username' class='username_input' placeholder='username'></input><br>
-            <button onClick='play()' id='playbutton' class='block' style='position:absolute;'>Play!</button>
+            <button id='playbutton' class='block' style='position:absolute;'>Loading...</button>
         </div>
         <img id='background' class='background' onload="load_background()" src="{{ url_for('static', filename='bean_map.png') }}">
-        <div id='loading' style='display:none;'>
-            <h1 id='loading_header'>Loading...</h1>
-        </div>
     </body>
 </html>
