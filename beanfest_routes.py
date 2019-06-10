@@ -51,7 +51,8 @@ def need_id(message):
 @socketio.on('recieve data', namespace='/beanfest')
 def recieve_data(message): 
     global players
-    
+    #print('player thing:')
+    #print(players[request.sid].data())
     try:
         players[request.sid].position.x = message['position']['x']
         players[request.sid].position.y = message['position']['y']
