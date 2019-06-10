@@ -16,7 +16,7 @@ upcoming changes:
  - finish/fix movement
  - add bullets (baked bean cans)
  - add a kill feed/kill leaders 
- - add an alert after you die (think the "you were eliminated by <player>" from overwatch)
+ - add an alert after you die (think the "you were eliminated by \<player\>" from overwatch)
  - make a patreon 
  - start a beanfest esports scene
   
