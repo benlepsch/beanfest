@@ -7,6 +7,8 @@ import random
 sids = []
 players = {}
 
+print('running!\n'*50)
+
 def get_cache():
     global players, sids
     to_return = []
