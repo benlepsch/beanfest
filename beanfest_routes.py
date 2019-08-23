@@ -45,6 +45,7 @@ def beanfest():
 
 @socketio.on('need id', namespace='/bbeanfest')
 def need_id(message):
+    print('giving id')
     sids.append(request.sid)
     players[request.sid] = Player(request.sid, message['username'])
     emit('give id', players[request.sid].data())
