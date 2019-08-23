@@ -123,11 +123,9 @@ function play() {
         console.log('waiting for id');
     } else {
 
-        document.getElementById('menu').style.display = 'none';
-        //run the game loop 150 times a second but only request server data 30 times
-        //this is to move the bullets super fast
-        game_running = true;
-        startGame(150);
+        document.getElementById('playbutton').innerHTML = 'Starting...';
+        console.log('waiting for init data');
+        
     }
     // request player id from server
     // hide menu, load in background
