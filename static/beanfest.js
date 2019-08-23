@@ -61,7 +61,7 @@ $(document).ready(function() {
     screen_width = $(window).width();
     initZoom = window.devicePixelRatio;
 
-    socket = io.connect('http://' + document.domain + ':' + location.port + '/beanfest');
+    socket = io.connect('http://' + document.domain + ':' + location.port + '/bbeanfest');
 
     socket.on('give id', (msg) => {
         console.log('working');

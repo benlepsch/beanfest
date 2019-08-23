@@ -43,14 +43,14 @@ class Player:
 def beanfest():
     return render_template('beanfest.html')
 
-@socketio.on('need id', namespace='/beanfest')
+@socketio.on('need id', namespace='/bbeanfest')
 def need_id(message):
     sids.append(request.sid)
     players[request.sid] = Player(request.sid, message['username'])
     emit('give id', players[request.sid].data())
     emit('init data', get_cache())
 
-@socketio.on('recieve data', namespace='/beanfest')
+@socketio.on('recieve data', namespace='/bbeanfest')
 def recieve_data(message): 
     global players
     #print('player thing:')
@@ -65,7 +65,7 @@ def recieve_data(message):
     
 
 
-@socketio.on('disconnect', namespace='/beanfest')
+@socketio.on('disconnect', namespace='/bbeanfest')
 def disconnect():
     try:
         players.pop(request.sid)
