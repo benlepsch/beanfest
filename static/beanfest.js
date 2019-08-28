@@ -163,9 +163,7 @@ function updatePlayer(data) {
         player_icon.style.left = data.position.x/100 * parseFloat(getPercent(parseFloat(background.clientWidth), true)) + parseFloat(background.style.left) + '%';
         player_icon.style.top = data.position.y/100 * parseFloat(getPercent(parseFloat(background.clientHeight), false)) + parseFloat(background.style.top) + '%';
     }
-    
-    username.style.left = parseFloat(player_icon.style.left) + parseFloat(getPercent(parseFloat(player_icon.clientWidth)/2, true)) + '%';
-    username.style.top = parseFloat(player_icon.style.top) + parseFloat(getPercent(player_icon.clientHeight, false)) + parseFloat(getPercent(4, false)) + '%';
+    // todo: re program this
 }
 
 function createPlayer(data) {
@@ -233,6 +231,9 @@ function checkKeys() {
             usernames[i].style.top = parseFloat(usernames[i].style.top) + parseFloat(getPercent(y_change, false)) + '%';
         }
     }
+    // todo: update player pos here
+    player.position.x += parseFloat(getPercent(x_change, true));
+    player.position.y += parseFloat(getPercent(y_change, false));
 }
 
 //runs the game at a specified fps
@@ -250,7 +251,6 @@ function startGame(fps) {
     background.style.height = getPercent(10000, false);
     
     //set background position
-    //-72 x 1300 z (for minecraft not beanfest)
     let b_x, b_y;
     b_x = player.position.x/100 * parseFloat(background.style.width) - parseFloat(getPercent(screen_width/2, true));
     b_y = player.position.y/100 * parseFloat(background.style.height) - parseFloat(getPercent(screen_height/2, false));
