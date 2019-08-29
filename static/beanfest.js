@@ -160,8 +160,10 @@ function updatePlayer(data) {
             multiply percentage by background image width/height to get where it is
             then add the background left/top position already to get where it is relative to your screen
         */
-        player_icon.style.left = data.position.x/100 * parseFloat(getPercent(parseFloat(background.clientWidth), true)) + parseFloat(background.style.left) + '%';
-        player_icon.style.top = data.position.y/100 * parseFloat(getPercent(parseFloat(background.clientHeight), false)) + parseFloat(background.style.top) + '%';
+        //player_icon.style.left = data.position.x/100 * parseFloat(getPercent(parseFloat(background.clientWidth), true)) + parseFloat(background.style.left) + '%';
+        //player_icon.style.top = data.position.y/100 * parseFloat(getPercent(parseFloat(background.clientHeight), false)) + parseFloat(background.style.top) + '%';
+        player_icon.style.top = data.position.y + '%';
+        player_icon.style.left = data.position.x + '%';
     }
     // todo: re program this
 }
