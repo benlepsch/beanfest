@@ -232,8 +232,8 @@ function checkKeys() {
         }
     }
     // todo: update player pos here
-    player.position.x += parseFloat(getPercent(x_change, true));
-    player.position.y += parseFloat(getPercent(y_change, false));
+    player.position.x -= parseFloat(getPercent(x_change, true));
+    player.position.y -= parseFloat(getPercent(y_change, false));
 }
 
 //runs the game at a specified fps
